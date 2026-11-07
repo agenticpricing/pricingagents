@@ -3,38 +3,40 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "agentic-pricing"
-version = "0.0.2"
-description = "Shared foundation for agentic AI in insurance pricing."
+name = "pricingagents"
+version = "0.0.1"
+description = "Agents for non-life and life insurance pricing."
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     { name = "David Fischer", email = "fischerdm1@outlook.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 classifiers = [
     "Development Status :: 1 - Planning",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = [
-    "agentic-pricing-core>=0.0.1",
-    "agentic-pricing-tools>=0.0.1",
-    "agentic-pricing-agents>=0.0.1",
-    "agentic-pricing-mcp>=0.0.1",
-    "agentic-pricing-servers>=0.0.1",
-]
+dependencies = []
 
 [project.urls]
-Homepage = "https://agentic-pricing.ai"
+Repository = "https://github.com/fischerdm/pricingagents"
 
-# Meta-package: ships no code of its own. The 'agentic_pricing' namespace is
-# provided by the sub-packages under packages/ (PEP 420, no __init__.py).
+# mammuthus and olivetree join the nonlife and life extras once their plain
+# library releases are published.
+[project.optional-dependencies]
+agents = ["anthropic"]
+nonlife = ["pricingagents[agents]"]
+life = ["pricingagents[agents]"]
+mcp = ["mcp"]
+dashboard = ["streamlit", "plotly"]
+
 [tool.hatch.build.targets.wheel]
 core-metadata-version = "2.4"
-bypass-selection = true
+packages = ["src/pricingagents"]
 
 [tool.hatch.build.targets.sdist]
 core-metadata-version = "2.4"
-only-include = ["README.md", "LICENSE"]
+only-include = ["src/pricingagents", "README.md", "LICENSE", "pyproject.toml"]
