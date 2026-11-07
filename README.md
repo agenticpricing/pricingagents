@@ -1,29 +1,42 @@
-# agentic-pricing
+# pricingagents
 
-Shared foundation for agentic AI in insurance pricing.
+Agents for non-life and life insurance pricing.
 
-This project is at an early stage. `agentic-pricing` is a meta-package that
-installs the following components, which share the `agentic_pricing` namespace:
+**Status: early stage.** This release sets out the package structure and contains no functionality yet.
 
-| PyPI package              | Import as                 | Purpose                                                              |
-| ------------------------- | ------------------------- | -------------------------------------------------------------------- |
-| `agentic-pricing-core`    | `agentic_pricing.core`    | Shared domain model, interfaces and configuration.                   |
-| `agentic-pricing-tools`   | `agentic_pricing.tools`   | Building-block utilities used by agents.                             |
-| `agentic-pricing-agents`  | `agentic_pricing.agents`  | Agentic components built on top of tools.                            |
-| `agentic-pricing-mcp`     | `agentic_pricing.mcp`     | Shared MCP server infrastructure for exposing tools and agents.      |
-| `agentic-pricing-servers` | `agentic_pricing.servers` | Shared infrastructure for exposing tools and agents as services.     |
+## How the packages fit together
 
-It is used by the line-of-business projects built on top of it, which follow the
-same layers (`-tools`, `-agents`, `-mcp`, `-servers`) and build on the matching
-`agentic-pricing` package:
+Actuarial models live in plain libraries that don't depend on agents or LLMs. `pricingagents` holds everything agentic and builds on those libraries.
 
-| Project                                          | Line of business                 |
-| ------------------------------------------------ | -------------------------------- |
-| [mammuthus](https://pypi.org/project/mammuthus/) | Non-life (P&C) insurance pricing |
-| [olivetree](https://pypi.org/project/olivetree/) | Life insurance pricing           |
+| Package | Purpose | Agentic? |
+|---|---|---|
+| [mammuthus](https://pypi.org/project/mammuthus/) | Non-life models, simulations, optimizers | No |
+| [olivetree](https://pypi.org/project/olivetree/) | Life models, simulations, optimizers (reserved) | No |
+| `pricingagents` | Agents, orchestration, MCP, review dashboard, audit trail | Yes |
+
+```text
+pricingagents
+├── core       # LLM client, session log, review and override logic
+├── nonlife    # agents, prompts, backends, MCP, dashboard
+└── life       # reserved, not implemented
+```
 
 ## Installation
 
 ```bash
-pip install agentic-pricing
+pip install pricingagents
 ```
+
+Optional extras are defined for the planned components:
+
+| Extra | Installs | For |
+|---|---|---|
+| `agents` | `anthropic` | Agents with any backend |
+| `nonlife` | `pricingagents[agents]` | Standard non-life install |
+| `life` | `pricingagents[agents]` | Reserved |
+| `mcp` | MCP SDK | MCP server without an LLM client |
+| `dashboard` | `streamlit`, `plotly` | Review UI |
+
+## License
+
+MIT
